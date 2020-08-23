@@ -1,6 +1,5 @@
 const request = require("request-promise");
 const cheerio = require("cheerio");
-<<<<<<< HEAD
 const puppeteer = require("puppeteer");
 const mongoose = require("mongoose");
 // const Listing = require("./model/Listing");
@@ -76,7 +75,6 @@ async function scrapeListings(page) {
 //     }
 // }
 // scrape();
-=======
 
 async function scrape(){
     for (let positionIndex = 0; positionIndex <= 50; positionIndex = positionIndex + 10){
@@ -90,6 +88,4 @@ async function scrape(){
             console.log("At page number" + positionIndex);
     }
 }
-
 scrape();
->>>>>>> 898477e88ef36b712a71a67788a4d9d7bb09eb25
