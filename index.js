@@ -17,6 +17,14 @@ const jobScraped = [
     }
   ];
 
+  async function connectToMongoDb() {
+    await mongoose.connect(
+      "mongodb+srv://Hexiao:ReactTest@jobinfor.r2hn1.mongodb.net/jobInfor?retryWrites=true&w=majority",
+      { useNewUrlParser: true }
+    );
+    console.log("connected to mongodb");
+  }
+
 async function scrapeListings(page) {
     for (let positionIndex = 0; positionIndex <= 50; positionIndex = positionIndex + 10) {
     await page.goto(
@@ -41,6 +49,7 @@ async function scrapeListings(page) {
             compensationElement, requirementElement, summaryElement, postTimeElement};
       })
       .get();
+    await sleep(100); //0.1 second sleep
     return listings;
     }
   }
@@ -50,42 +59,12 @@ async function scrapeListings(page) {
   }
 
   async function main() {
-    // await connectToMongoDb();
-    const browser = await puppeteer.launch({ headless: false });
+    await connectToMongoDb();
+    const browser = await puppeteer.launch({ headless: false});
     const page = await browser.newPage();
     const listings = await scrapeListings(page);
-    console.log(listings);
+    // console.log(listings);
   }
   
   main();
 
-
-
-// async function scrape(){
-//     // for (let positionIndex = 0; positionIndex <= 50; positionIndex = positionIndex + 10){
-//         const html = await request.get(
-//             "https://ca.indeed.com/jobs?q=web+developer&l=Toronto,+ON&start" + "10"
-//         );
-//         const $ = await cheerio.load(html);
-//         $(".jobsearch-SerpJobCard").each((index, element) => {
-//             // const test = $(element).find(".remote")
-//             // console.log("good")
-//         });
-//             console.log("At page number" + positionIndex);
-//     }
-// }
-// scrape();
-
-async function scrape(){
-    for (let positionIndex = 0; positionIndex <= 50; positionIndex = positionIndex + 10){
-        const html = await request.get(
-            "https://ca.indeed.com/jobs?q=web+developer&l=Toronto,+ON&start" + positionIndex
-        );
-        const $ = await cheerio.load(html);
-        $(".company").each((index, element) => {
-            console.log($(element).text());
-        });
-            console.log("At page number" + positionIndex);
-    }
-}
-scrape();
