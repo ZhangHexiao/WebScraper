@@ -19,8 +19,11 @@
   "homepage": "https://github.com/ZhangHexiao/WebScraper#readme",
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
+<<<<<<< HEAD
     "mongoose": "^5.10.0",
     "puppeteer": "^5.2.1",
+=======
+>>>>>>> 898477e88ef36b712a71a67788a4d9d7bb09eb25
     "request": "^2.88.2",
     "request-promise": "^4.2.6"
   }
