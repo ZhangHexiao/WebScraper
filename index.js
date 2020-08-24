@@ -26,7 +26,7 @@ const jobScrapedResult = [
   }
 
 async function scrapeListings(page) {
-    for (let positionIndex = 0; positionIndex <= 20; positionIndex = positionIndex + 10) {
+    for (let positionIndex = 0; positionIndex <= 490; positionIndex = positionIndex + 10) {
     await page.goto(
         "https://ca.indeed.com/jobs?q=web+developer&l=Toronto,+ON&start" + positionIndex
     );
