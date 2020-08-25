@@ -26,14 +26,17 @@ const jobScrapedResult = [
   }
 
 async function scrapeListings(page) {
-    for (let positionIndex = 0; positionIndex <= 490; positionIndex = positionIndex + 10) {
-    await page.goto(
-        "https://ca.indeed.com/jobs?q=web+developer&l=Toronto,+ON&start" + positionIndex
+    for (var positionIndex = 0; positionIndex < 500; positionIndex = positionIndex + 10) {
+    // await page.goto(
+    //     "https://ca.indeed.com/jobs?q=web+developer&l=Toronto,+ON&start" + positionIndex
+    // );
+    // const html = await page.content();
+    console.log(positionIndex)
+    const html = await request.get(
+      "https://ca.indeed.com/jobs?q=web+developer&l=Toronto,+ON&start" + positionIndex
     );
-    const html = await page.content();
-    const $ = cheerio.load(html);
-    const listings = $(".jobsearch-SerpJobCard")
-      .map((index, element) => {
+    const $ = await cheerio.load(html);
+    $(".jobsearch-SerpJobCard").each((index, element) => {
         const company = $(element).find(".company").text().trim();
         const location = $(element).find(".location").text().trim();
         const remoteOrOffice = $(element).find(".remote").text().trim();
@@ -46,24 +49,23 @@ async function scrapeListings(page) {
           .replace("new", "")
           .trim();
         const jobJustScraped =  { title, company, location, remoteOrOffice,
-          compensation, requirement, summary, postTime }; 
-        // const jobScrapedModel = new JobScraped(jobJustScraped); 
-        // jobScrapedModel.save();
-        return jobJustScraped;
-      })
-      .get();
-    
-    await sleep(100); //0.1 second sleep
-    return listings;
-    }
+        compensation, requirement, summary, postTime }; 
+        const jobScrapedModel = new JobScraped(jobJustScraped); 
+        jobScrapedModel.save();
+        // return jobJustScraped;
+      }); 
+    // await sleep(100); //0.1 second sleep
+    // console.log(listings)
+    // return listings;
   }
-
-  async function saveScrapeJobs(listings) {
-    for (var i = 0; i < listings.length; i++) {
-      const jobModel = new JobScraped(listings[i]);
-      await jobModel.save();
-    }
-  }
+  // console.log(listings.length)
+}
+  // async function saveScrapeJobs(listings) {
+  //   for (var i = 0; i < listings.length; i++) {
+  //     const jobModel = new JobScraped(listings[i]);
+  //     await jobModel.save();
+  //   }
+  // }
   async function sleep(miliseconds) {
     return new Promise(resolve => setTimeout(resolve, miliseconds));
   }
@@ -73,7 +75,7 @@ async function scrapeListings(page) {
     const browser = await puppeteer.launch({ headless: false});
     const page = await browser.newPage();
     const listings = await scrapeListings(page);
-    const scrapeJobDescriptions = await saveScrapeJobs(listings);
+    // const scrapeJobDescriptions = await saveScrapeJobs(listings);
     // console.log(listings);
   }
   
